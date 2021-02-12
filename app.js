@@ -23,9 +23,9 @@ printProfileData(profileDataArgs);
 
 
 ///////MAIN CODE//////
-const inquirer = require("inquirer")
-// const fs = require('fs')
-// const generatePage = require('./src/page-template')
+const inquirer = require("inquirer");
+const fs = require('fs');
+const generatePage = require('./src/page-template');
 
 // const pageHTML = generatePage(name, github);
 
@@ -75,10 +75,10 @@ const promptUser = () => {
       type: 'input',
       name: 'about',
       message: 'Provide some information about yourself:',
-      when: ({confirmAbout}) => {
-        if (confirmAbout){
+      when: ({ confirmAbout }) => {
+        if (confirmAbout) {
           return true;
-        }else {
+        } else {
           return false;
         }
       }
@@ -86,7 +86,6 @@ const promptUser = () => {
   ]);
 };
 // invoke the promptUser function to return inquirer.prompt method as promise. appernd the  .then() mothod to resolve promise by returning answers
-//promptUser().then(answers => console.log(answers));
 
 const promptProject = portfolioData => { // use console logs to devide prompts
 
@@ -172,6 +171,11 @@ const promptProject = portfolioData => { // use console logs to devide prompts
 
 promptUser()
   .then(promptProject)
-  .then(portfolioData => {
-    console.log(portfolioData);
+  .then(portfolioData => { // pass portfolioData as argument
+    const pageHTML = generatePage(portfolioData);
+
+    fs.writeFile('./index.html', pageHTML, err => {
+      if (err) throw new Error(err);
+    });
   });
+
